@@ -8,12 +8,14 @@
 </head>
 <body>
     <!-- all the code inside application goes here -->
-    <!-- before and after our page -->
-    Before
-    <br>
+    <%- include('../partials/header.ejs') %>
+    
+    <% if (typeof errorMessage !== 'undefined' && errorMessage) { %> 
+        <%- include('../partials/errorMessage.ejs', { errorMessage: errorMessage }) %>
+    <% } %>
+
     <!-- include every single of other pages in application ??? -->
     <%- body %>
     <br>
-    After
 </body>
 </html>
