@@ -7,6 +7,7 @@ const app = express();
 const expressLayouts = require('express-ejs-layouts');
 const indexRouter = require('./routes/index');
 const authorsRouter = require('./routes/authors');
+const bookRouter = require('./routes/books');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose'); ///// mongodb configuration
 mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true })   // what is userNewUrlParser???
@@ -25,7 +26,8 @@ app.use(expressLayouts); // use express layouts variable
 app.use(express.static('public')); // where are public files stored [images, sytlesheets, javascript, etc]; the directory name
 app.use(bodyParser.urlencoded({ limit : '10mb', extended : false }));
 app.use('/', indexRouter);  ///// use mini router
-app.use('/authors', authorsRouter); /////
+app.use('/authors', authorsRouter); 
+app.use('/books', bookRouter); /////
 
 
 

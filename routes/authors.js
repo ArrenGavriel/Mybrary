@@ -17,9 +17,8 @@ router.get('/', async (req, res) => {
             searchOptions : req.query
         });
     } catch(err) {
-
+        res.redirect('/');
     }
-    res.render('authors/index');
 });
 
 // new authors route
@@ -34,6 +33,7 @@ router.post('/', async (req, res) => {
     });
 
     try {
+        // author is no longer accepting callback [deprecated]
         const newAuthor = await author.save();
         res.redirect(`/authors`);
     } catch(err) {
