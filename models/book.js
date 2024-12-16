@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
 
-// ???
-const coverImageBasePath = 'uploads/bookCovers';
-const path = require('path');
+const coverImageBasePath = 'uploads/bookCovers'; // *** specify the path where the image stored in local server inside the `views`
+const path = require('path'); // ***
 
 // create schema
 const bookSchema = new mongoose.Schema({
@@ -27,23 +26,38 @@ const bookSchema = new mongoose.Schema({
         required : true,
         default : Date.now
     },
-    coverImageName : {// pass the name of the image to database
+    coverImage : { // ???
+        type : Buffer,
+        required : true
+    },
+    coverImageType : { // ???
         type : String,
         required : true
     },
+    // coverImageName : {// ***pass the name of the image to database
+    //     type : String,
+    //     required : true
+    // },
     author : {
-        type : mongoose.Schema.Types.ObjectId, // referencing another object => ???
+        type : mongoose.Schema.Types.ObjectId, // referencing another object => special datatype in mongoDB [!!!]
         required : true,
         ref : 'Author'  // the name must match with the model name we set at author model
     }
 });
 
 // create virtual property ???
+// ***
+// bookSchema.virtual('coverImagePath').get(function() {
+//     if(this.coverImageName != null) {
+//         return path.join('/', coverImageBasePath, this.coverImageName);
+//     }
+// });
+
 bookSchema.virtual('coverImagePath').get(function() {
-    if(this.coverImageName != null) {
-        return path.join('/', coverImageBasePath, this.coverImageName);
+    if(this.coverImage != null && this.coverImageType != null) {
+        return `data: ${this.coverImageType};charset=utf-8;base64,${this.coverImage.toString('base64')}`;
     }
 });
 
 module.exports = mongoose.model('Book', bookSchema); // params => table name, schema
-module.exports.coverImageBasePath = coverImageBasePath;
+// module.exports.coverImageBasePath = coverImageBasePath;  // ***

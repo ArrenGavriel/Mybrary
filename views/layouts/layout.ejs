@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge"> <!-- ??? -->
+
+    <!-- filepond stylesheets -->
+    <link href="https://unpkg.com/filepond@^4/dist/filepond.css" rel="stylesheet" />
+    <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet"/>
+
+
+
     <title>Mybrary</title>
 </head>
 <body>
@@ -17,5 +24,34 @@
     <!-- include every single of other pages in application ??? -->
     <%- body %>
     <br>
+
+    <!-- set up filepond library -->
+    <script src="https://unpkg.com/filepond-plugin-file-encode/dist/filepond-plugin-file-encode.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-image-resize/dist/filepond-plugin-image-resize.js"></script>
+    <script src="https://unpkg.com/filepond@^4/dist/filepond.js"></script>
+    <script>
+        // const inputElement = document.querySelector('input[type="file"]');
+    
+        // const pond = FilePond.create(inputElement);
+        
+        FilePond.registerPlugin(
+            FilePondPluginFileEncode,
+            FilePondPluginImagePreview,
+            FilePondPluginImageResize
+        );
+
+        FilePond.setOptions({
+            stylePanelAspectRatio: 150 / 100,
+            imageResizeTargetWidth: 100,
+            imageResizeTargetHeight: 150,
+
+            
+        });
+
+        FilePond.parse(document.body);
+    </script>
+
+    
 </body>
 </html>
