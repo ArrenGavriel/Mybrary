@@ -9,6 +9,7 @@ const indexRouter = require('./routes/index');
 const authorsRouter = require('./routes/authors');
 const bookRouter = require('./routes/books');
 const bodyParser = require('body-parser');
+const methodOverride = require('method-override');
 const mongoose = require('mongoose'); ///// mongodb configuration
 mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true })   // what is userNewUrlParser???
     .then(() => console.log('Connected to mongoose'))
@@ -22,6 +23,7 @@ app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views'); // __dirname is the environment variable or superglobal variable for getting the name of current working directory
 app.set('layout', 'layouts/layout'); // every single file is gonna be put inside layout file, so we dont have to duplicate the html header and footer
 
+app.use(methodOverride('_method'));
 app.use(expressLayouts); // use express layouts variable
 app.use(express.static('public')); // where are public files stored [images, sytlesheets, javascript, etc]; the directory name
 app.use(bodyParser.urlencoded({ limit : '10mb', extended : false }));
