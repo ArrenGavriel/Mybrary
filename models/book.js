@@ -45,7 +45,7 @@ const bookSchema = new mongoose.Schema({
     }
 });
 
-// create virtual property ???
+// create virtual property for getting the resource path for which the cover image resource located in local web server
 // ***
 // bookSchema.virtual('coverImagePath').get(function() {
 //     if(this.coverImageName != null) {
@@ -53,7 +53,9 @@ const bookSchema = new mongoose.Schema({
 //     }
 // });
 
+// this is 
 bookSchema.virtual('coverImagePath').get(function() {
+    // ??? why it i
     if(this.coverImage != null && this.coverImageType != null) {
         return `data: ${this.coverImageType};charset=utf-8;base64,${this.coverImage.toString('base64')}`;
     }

@@ -18,7 +18,7 @@
     <%- include('../partials/header.ejs') %>
     
     <% if (typeof errorMessage !== 'undefined' && errorMessage) { %> 
-        <%- include('../partials/errorMessage.ejs', { errorMessage: errorMessage }) %>
+        <%- include('../partials/errorMessage.ejs', { errorMessage: errorMessage, books : typeof books !== 'undefined' ? books : [] }) %>
     <% } %>
 
     <!-- include every single of other pages in application ??? -->

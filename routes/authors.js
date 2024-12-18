@@ -83,6 +83,7 @@ router.get('/:id', async (req, res) => {
     } catch (error) {
         res.redirect('/');
     }
+
 });
 
 router.get('/:id/edit', async (req, res) => {
@@ -115,7 +116,7 @@ router.put('/:id', async (req, res) => {
 
         } else {
 
-            // else, fi there is an error while saving, it will log the error as well as render edit page again
+            // else, if there is an error while saving, it will log the error as well as render edit page again
             let errorMessage = 'Error updating author';
             if(err.name === 'ValidationError') {
                 errorMessage = 'Name is required';

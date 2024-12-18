@@ -1,6 +1,8 @@
 <%= locals.errorMessage %>
 <div>
-    <% books.forEach(book => {  %>
-        <img height="150" width="100" src="<%= book.coverImagePath %>" alt="">
-    <% }) %>
+    <% if(typeof books !== 'undefined' && books.length > 0) { %>
+        <% books.forEach(book => {  %>
+            <img height="150" width="100" src="<%= book.coverImagePath %>" alt="">
+        <% }) %>
+    <% } %>
 </div>

@@ -73,8 +73,7 @@ router.post('/',
 
     try {
         const newBook = await book.save();
-        // res.redirect(`/books/${newBook.id}`);
-        res.redirect(`/books`);
+        res.redirect(`/books/${newBook.id}`);
     } catch (err) {
 
         console.log('Error creating book: ', err);
@@ -92,6 +91,100 @@ router.post('/',
 
 
 
+// ADD DYNAMIC ROUTES FOR EDITING AUTHORS
+// get book by id route
+router.get('/:id', async (req, res) => {
+    try {
+
+        const book = await Book.findById(req.params.id)
+            .populate('author')
+            .exec(); // populate the author collection inside the book object // ???
+            res.render('books/show', { book : book });
+
+    } catch (error) {
+        res.redirect('/');
+    }
+});
+
+// edit book route
+router.get('/:id/edit', async (req, res) => {
+    
+    try {
+        const book = await Book.findById(req.params.id); // acquire the book id from the url parameter
+        renderEditPage(res, book);
+    } catch (error) {
+        res.redirect('/');
+    }
+
+});
+
+// update book route
+router.put('/:id',
+    // ***
+    /*upload.single('cover'),*/ 
+    async (req, res) => {
+    // same as post to `/books/` endpoint 
+
+    // const fileName = req.file != null ? req.file.filename : null; // req.file is the extended property by the multer upload.single [!!!]
+    
+    let book;
+
+    console.log('REQUEST BODY: ', req.body); // log
+
+    try {
+
+        book = await Book.findById(req.params.id);
+        book.title = req.body.title;
+        book.author = req.body.author;
+        book.publishDate = new Date(req.body.publishDate);
+        book.pageCount = req.body.pageCount;
+        book.description = req.body.description;
+
+        if(req.body.cover != null && req.body.cover !== '') {
+            saveCover(book, req.body.cover);
+        }
+
+        await book.save();
+        res.redirect(`/books/${book.id}`);
+
+    } catch (err) {
+
+        console.log('Error updating book: ', err); // log
+
+        if(book !=  null) {
+            renderEditPage(res, book, true);
+        } else {
+            res.redirect('/');
+        }
+    }
+});
+
+// delete book route
+router.delete('/:id', async (req, res) => {
+    let book;
+
+    try {
+        book = await Book.findById(req.params.id);
+        await book.deleteOne();
+        res.redirect('/books');
+    } catch (err) {
+
+        console.error('DELETE BOOK FAILED: ', err);
+
+        if(book != null) {
+            res.render('books/show', {
+                book : book,
+                errorMessage : 'Could no remove book'
+            });
+        } else {
+            res.redirect('/');
+        }
+    }
+})
+
+
+
+
 
 
 
@@ -99,6 +192,14 @@ router.post('/',
 
 ///// modularized function
 async function renderNewPage(res, book, hasError = false) {
+    renderFormPage(res, book, 'new', hasError);
+}
+
+async function renderEditPage(res, book, hasError = false) {
+    renderFormPage(res, book, 'edit', hasError);
+}
+
+async function renderFormPage(res, book, form, hasError = false) {
 
     try {
 
@@ -109,15 +210,23 @@ async function renderNewPage(res, book, hasError = false) {
         };
 
         if(hasError) {
-            params.errorMessage = 'Error Creating Book';
-            console.error('params Error Details:', params);
-            console.error('book Error Details:', book);
+            if(form === 'edit') {
+                params.errorMessage = 'Error Updating Book';
+            } else {
+                params.errorMessage = 'Error Creating Book';
+            }
         }
 
-        res.render('books/new', params);
+        if(hasError) {
+            params.errorMessage = 'Error Creating Book';
+            // console.error('PARAMS ERROR DETAILS:', params); // log
+            // console.error('BOOK ERROR DETAILS:', book); // log
+        }
+
+        res.render(`books/${form}`, params);
 
     } catch(err) {
-        console.error('Error rendering new page: ', err);
+        console.error('ERROR RENDERING NEW PAGE: ', err);
         res.redirect('/books');
     }
 }
