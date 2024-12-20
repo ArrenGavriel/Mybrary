@@ -1,0 +1,36 @@
+@import 'shared/catamaran-stylesheet.css';
+@import 'shared/lemon-milk-stylesheet.css';
+@import 'shared/variables.css'; /* variables for coloring */
+@import 'shared/header.css'; /* header styling */
+@import 'shared/buttons.css';
+
+:root {
+    font-family: 'LEMON MILK';
+    font-size: 20px;
+    color: var(--color-text-light);
+}
+
+/* ??? */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+body {
+    background: linear-gradient(to right, var(--color-background-dark), var(--color-background-light)); /* apply gradient from left to right */
+}
+
+.container {
+    max-width: 1200px;
+    margin: auto;
+    margin-bottom: 3rem; /* rem??? */
+}
+
+.inner-container {
+    margin: 0 2rem;
+}
+
+/* class to edit all page headers */
+.page-header {
+    font-size: 2rem;
+    font-weight: 500;
+}
