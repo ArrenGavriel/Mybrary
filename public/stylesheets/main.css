@@ -3,6 +3,7 @@
 @import 'shared/variables.css'; /* variables for coloring */
 @import 'shared/header.css'; /* header styling */
 @import 'shared/buttons.css';
+@import 'shared/form.css';
 
 :root {
     font-family: 'LEMON MILK';
