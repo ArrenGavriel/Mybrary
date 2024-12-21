@@ -10,7 +10,7 @@
     <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet"/>
 
     <!-- font stylesheets -->
-    <link href="/stylesheets/main.css" rel="stylesheet">
+    <link id="main-css" href="/stylesheets/main.css" rel="stylesheet">
 
     <title>Mybrary</title>
 </head>
@@ -42,21 +42,42 @@
     
         // const pond = FilePond.create(inputElement);
         
-        FilePond.registerPlugin(
-            FilePondPluginFileEncode,
-            FilePondPluginImagePreview,
-            FilePondPluginImageResize
-        );
+        const rootStyles = window.getComputedStyle(document.documentElement); // getting the style from the root element of document
 
-        FilePond.setOptions({
-            stylePanelAspectRatio: 150 / 100,
-            imageResizeTargetWidth: 100,
-            imageResizeTargetHeight: 150,
+        // ???
+        if(rootStyles.getPropertyValue('--book-cover-width-large') != null) {
+            ready();
+        } else {
+            document.getElementById('main-css')
+                .addEventListener('load', ready);
+        }
 
-            
-        });
+        function ready() {
+            // ???
+            const coverWidth = parseFloat(rootStyles.getPropertyValue('--book-cover-width-large')); // actually returns a string and the parsed to float
 
-        FilePond.parse(document.body);
+            // ???
+            const coverAspectRatio = parseFloat(rootStyles.getPropertyValue('--book-cover-aspect-ratio'));
+
+            // ???
+            const coverHeight = coverWidth / coverAspectRatio;
+                
+            FilePond.registerPlugin(
+                FilePondPluginFileEncode,
+                FilePondPluginImagePreview,
+                FilePondPluginImageResize
+            );
+
+            FilePond.setOptions({
+                stylePanelAspectRatio: 1 / coverAspectRatio, // based on what expected by filepond???
+                imageResizeTargetWidth: coverWidth,
+                imageResizeTargetHeight: coverHeight
+            });
+
+            FilePond.parse(document.body);
+
+        }
+        
     </script>
 
     
